@@ -28,7 +28,7 @@ let mytokenConfig=require('./token/token.js');//解析token
 app.use(logger('dev'));
 
 //mongoose连接数据库
-mongoose.connect("mongodb://127.0.0.1:27001/angler", {
+mongoose.connect("mongodb://127.0.0.1:27001/jwtangler", {
     useNewUrlParser: true,
     useUnifiedTopology: true
   },
