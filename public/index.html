@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test websocket -2021-06-02</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .msg-show-wrapper {
+            position: absolute;
+            width: 400px;
+            top: 10px;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="msg-show-wrapper">
+        <h1>聊天记录</h1>
+        <ul class="lists">
+
+        </ul>
+
+        <input type="text" name="chat-text" id="inputstr" />
+        <button id="btn-send">发送</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+        let ullists = document.querySelector("ul.lists");
+        socket.on("accept", function (res) {
+            let liitem = document.createElement("li");
+            liitem.innerText = "我说" + res;
+            ullists.appendChild(liitem);
+        })
+        socket.on("serverres", function (res) {
+            let liitem = document.createElement("li");
+            liitem.innerText = "服务器说：" + res;
+            ullists.appendChild(liitem);
+        })
+
+
+ 
+        document.querySelector("#btn-send").addEventListener("click", function () {
+            let text = document.getElementById("inputstr").value;
+            socket.emit("jjcc", text);
+
+        })
+    </script>
+</body>
+
+</html>
