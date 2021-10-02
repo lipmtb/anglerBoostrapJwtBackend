@@ -12,7 +12,7 @@ const createUserToken = (username, userid) => {
             userid: userid
         }, mykey, {
             algorithm: 'HS256',
-            expiresIn: 60 * 60
+            expiresIn: 24* 60 * 60
         }, (err, token) => {
             if (err) {
                 reject(err);

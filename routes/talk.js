@@ -465,6 +465,51 @@ router.get("/getHasSendTalk", (req, res) => {
     })
 })
 
+
+
+//获取用户收藏过的帖子(token有效)
+router.get("/whoCollectedLists",(req,res)=>{
+    
+    let userid=req.userinfo.userid;
+    let skip=parseInt(req.query.skip)||0;
+    let limit=parseInt(req.query.limit)||4;
+
+    collectTalkModel.aggregate([{
+        $match:{
+            anglerId:userid
+        }
+    },{
+        $project:{
+            anglerId:"$anglerId",
+            collectTalkId:{
+                $toObjectId:"$collectTalkId"
+            }
+        }
+    },{
+        $lookup:{
+            from:"talkEssay",
+            localField:"collectTalkId",
+            foreignField:"_id",
+            as:"collectTalkData"
+        }
+    },{
+        $sort:{
+            _id:-1
+        }
+    },{
+        $skip:skip
+    },{
+        $limit:limit
+    }]).then((lists)=>{
+        res.send(lists);
+    }).catch((err)=>{
+        res.send({
+            errCode:1
+        })
+            throw err;
+    })
+})
+
 //测试json数据post
 router.post("/httpJsonPost",bodyParser.json(),(req,res)=>{
     console.log("服务端接收到",req.body);

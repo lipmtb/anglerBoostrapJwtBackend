@@ -93,7 +93,7 @@ app.use(expressJWT({
     secret: mytokenConfig.mykey,
     algorithms: ['HS256']
 }).unless({
-    path: ["/regist","/login","/talk/hotTalk","/talk/newTalk"]  //除了这些地址，其他的URL都需要验证
+    path: ["/regist","/login","/talk/hotTalk","/talk/newTalk","/tip/tipClassSomeEssays"]  //除了这些地址，其他的URL都需要验证
 }));
 
 
