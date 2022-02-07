@@ -13,13 +13,13 @@ let talkRouter = require("./routes/talk");
 let profileRouter = require("./routes/profile");
 let socketRouter = require("./routes/socket");
 let manageRouter = require("./routes/manage");
-
-let testRouter=require("./routes/test");
+let uploadRouter = require("./routes/upload");
+let testRouter = require("./routes/test");
 let app = express();
 
 //token验证
 let expressJWT = require('express-jwt');
-let mytokenConfig=require('./token/token.js');//解析token
+let mytokenConfig = require('./token/token.js'); //解析token
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -67,18 +67,19 @@ app.all('*', function (req, res, next) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 //解析token获取用户信息
-app.use((req,res,next)=>{
-  let token=req.headers.authorization;
-  console.log("****app use 获取到authorizatio*****",token);
-  if(!token){
+app.use((req, res, next) => {
+  let token = req.headers.authorization;
+  req.userinfo = null;
+  console.log("****app use 获取到authorization*****", token);
+  if (!token) {
     return next();
-  }else{
-    mytokenConfig.verifyTokenMyTest(token).then((payload)=>{
-      req.userinfo=payload;
-      console.log("解析token成功",payload);
+  } else {
+    mytokenConfig.verifyTokenMyTest(token).then((payload) => {
+      req.userinfo = payload;
+      console.log("解析token成功", payload);
       return next();
-    }).catch((err)=>{
-      console.log("********解析token 错误************",err);
+    }).catch((err) => {
+      console.log("********解析token 错误************", err);
       return next();
     })
   }
@@ -90,24 +91,24 @@ app.use((req,res,next)=>{
 //验证token是否过期
 
 app.use(expressJWT({
-    secret: mytokenConfig.mykey,
-    algorithms: ['HS256']
+  secret: mytokenConfig.mykey,
+  algorithms: ['HS256']
 }).unless({
-    path: ["/regist","/login","/talk/hotTalk","/talk/newTalk","/tip/tipClassSomeEssays"]  //除了这些地址，其他的URL都需要验证
+  path: ["/regist", "/login", "/talk/hotTalk", "/talk/newTalk", "/tip/tipClassSomeEssays"] //除了这些地址，其他的URL都需要验证
 }));
 
 
 // token失效（不加authorization或者过期等的都会失效）
 app.use(function (err, req, res, next) {
-  console.log("token失效++++++++++",err.status,err.inner.message);
+  console.log("token失效++++++++++", err.status, err.inner.message);
   if (err.name === 'UnauthorizedError') {
-    
-    res.status(200).send({  
-      errCode:err.status,
-      errMsg:err.inner.message,
-      err:err
+
+    res.status(401).send({
+      errCode: err.status,
+      errMsg: err.inner.message,
+      err: err
     });
-  }else{
+  } else {
     next();
   }
 });
@@ -127,8 +128,9 @@ app.use("/socket", socketRouter);
 
 app.use("/manage", manageRouter);
 
+app.use("/upload", uploadRouter);
 
-app.use("/test",testRouter);
+app.use("/test", testRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -156,9 +158,9 @@ let sio = require("socket.io")(http, {
 
 sio.on("connection", function (socket) {
   console.log("一个客户端连接了");
-  socket.on("jjcc",(text)=>{
-    socket.emit("accept",text);
-    socket.emit("serverres",text+Math.random());
+  socket.on("jjcc", (text) => {
+    socket.emit("accept", text);
+    socket.emit("serverres", text + Math.random());
   })
 })
 

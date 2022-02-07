@@ -98,7 +98,7 @@ router.post("/login", bodyParser.json(), (req, res) => {
         // console.log("数据库返回：", data);
         if (data.length === 0) { //登录失败
             res.send({
-                errMsg: "登录失败",
+                errMsg: "用户名或者密码错误",
                 errCode: 1
             });
         } else { //登录成功
@@ -162,6 +162,8 @@ router.post("/login/testpost", bodyParser.urlencoded({
     console.log("testpost登录中检查密码用户名", sess, username, password);
     res.send("<h1>你好" + username + "</h1>");
 })
+
+
 
 
 module.exports = router;

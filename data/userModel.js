@@ -39,10 +39,23 @@ const msgModel=mongoose.model("message",new mongoose.Schema({
 }),"message")
 
 
+//附件上传
+const uploadModal=mongoose.model("userUpload",new mongoose.Schema({
+    userId:String,
+    accessoryInfoLists:[{
+        accessoryId: String,//附件唯一标识
+        accessoryUrl: String,//附件路径
+        accessoryType: String,//附件类型
+        userId: String,//附件所属人
+        createDate: String
+    }]
+}))
+
+
 module.exports={
     userModel,
     userCareModel,
     commModel,
-    msgModel
-
+    msgModel,
+    uploadModal
 }

@@ -124,8 +124,8 @@ router.delete("/deleteTalk", function (req, res) {
     talkEssayModel.findById(tId).exec((err, da) => {
         let deleteImgPros = deleteReferenceImg(da, "talk");
         let deleteComment = deleteRefComment(tId, "talk");
-        let deleteCollect=deleteReferenceCollect(tId,'talk');
-        Promise.all([deleteImgPros, deleteComment,deleteCollect]).then(() => {
+        let deleteCollect = deleteReferenceCollect(tId, 'talk');
+        Promise.all([deleteImgPros, deleteComment, deleteCollect]).then(() => {
             talkEssayModel.deleteOne({
                 _id: mongoose.Types.ObjectId(tId)
             }).then((da) => {
@@ -156,8 +156,8 @@ router.delete("/deleteTip", function (req, res) {
     tipEssayModel.findById(tId).exec((err, da) => {
         let deleteImgPros = deleteReferenceImg(da, "tip");
         let deleteComment = deleteRefComment(tId, "tip");
-        let deleteCollect=deleteReferenceCollect(tId,'tip');
-        Promise.all([deleteImgPros, deleteComment,deleteCollect]).then(() => {
+        let deleteCollect = deleteReferenceCollect(tId, 'tip');
+        Promise.all([deleteImgPros, deleteComment, deleteCollect]).then(() => {
             tipEssayModel.deleteOne({
                 _id: mongoose.Types.ObjectId(tId)
             }).then((da) => {
@@ -226,7 +226,7 @@ function deleteReferenceImg(essayData, type) {
 
 
 //删除帖子相关的收藏
-function deleteReferenceCollect(tid,type){
+function deleteReferenceCollect(tid, type) {
     if (type == 'talk') {
         return collectTalkModel.deleteMany({
             collectTalkId: tid
@@ -300,49 +300,49 @@ router.get("/allUserLists", function (req, res) {
 //获取近6个月用户发布的帖子数
 router.get("/allSendForMonth", function (req, res) {
     //talkEssayModel tipEssayModel
-    let curDate=new Date();
+    let curDate = new Date();
     curDate.setDate(1);
     curDate.setHours(0);
     curDate.setMinutes(0);
     curDate.setSeconds(0);
 
-    let talkProsAll=[];
+    let talkProsAll = [];
     for (let i = 6; i > 0; i--) {
         let pros = talkEssayModel.countDocuments({
             publishTime: {
-                $gt: curDate-i*30*24*60*60*1000,
-                $lt: curDate-(i-1)*30*24*60*60*1000,
+                $gt: curDate - i * 30 * 24 * 60 * 60 * 1000,
+                $lt: curDate - (i - 1) * 30 * 24 * 60 * 60 * 1000,
             }
         })
         talkProsAll.push(pros);
     }
-    let talkAllPros=Promise.all(talkProsAll).then((talkArr)=>{
-        console.log("过去6个月talk数量",talkArr);
-       return talkArr;
+    let talkAllPros = Promise.all(talkProsAll).then((talkArr) => {
+        console.log("过去6个月talk数量", talkArr);
+        return talkArr;
     })
 
 
-    let tipAllPros=[];
+    let tipAllPros = [];
     for (let i = 6; i > 0; i--) {
         let pros = tipEssayModel.countDocuments({
             publishTime: {
-                $gt: curDate-i*30*24*60*60*1000,
-                $lt: curDate-(i-1)*30*24*60*60*1000,
+                $gt: curDate - i * 30 * 24 * 60 * 60 * 1000,
+                $lt: curDate - (i - 1) * 30 * 24 * 60 * 60 * 1000,
             }
         })
         tipAllPros.push(pros);
     }
-    let tipAllPromiseAll=Promise.all(tipAllPros).then((tipArr)=>{
-        console.log("过去6个月tip数量",tipArr);
+    let tipAllPromiseAll = Promise.all(tipAllPros).then((tipArr) => {
+        console.log("过去6个月tip数量", tipArr);
         return tipArr;
     })
 
 
-    Promise.all([talkAllPros,tipAllPromiseAll]).then((allArr)=>{
+    Promise.all([talkAllPros, tipAllPromiseAll]).then((allArr) => {
         res.send({
-            talkCountArr:allArr[0],
-            tipCountArr:allArr[1],
-            xArr:getXdataArr()
+            talkCountArr: allArr[0],
+            tipCountArr: allArr[1],
+            xArr: getXdataArr()
         })
     })
 
@@ -358,7 +358,7 @@ function getXdataArr() {
         if (tmp <= 0) {
             tmp = 12 + tmp;
         }
-        xArr.push(tmp+"月");
+        xArr.push(tmp + "月");
     }
 
     return xArr;
