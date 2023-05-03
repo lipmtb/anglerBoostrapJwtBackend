@@ -23,13 +23,12 @@ router.post("/gptai", bodyParser.json(), (req, res) => {
     };
     axios.post(OPENAI_URL, {
         "model": "gpt-3.5-turbo",
-        "messages": [{ "role": "user", "content": content }],
-        "temperature": "0.7"
+        "messages": [{ "role": "user", "content": content }]
     }, requestConfig).then(response => {
         console.log("请求成功", response);
         res.send({
             errCode: 0,
-            choices: response.choices,
+            choices: response.data.choices,
             message: "成功"
         })
     }).catch(error => {
