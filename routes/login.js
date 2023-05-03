@@ -87,7 +87,6 @@ router.post("/regist", bodyParser.json(), function (req, res) {
 
 //登录
 router.post("/login", bodyParser.json(), (req, res) => {
-  
     let username = req.body.username;
     let password = req.body.userpassword;
     console.log("登录中检查密码用户名", username, password);
@@ -102,8 +101,6 @@ router.post("/login", bodyParser.json(), (req, res) => {
                 errCode: 1
             });
         } else { //登录成功
-  
-            console.log(data[0]._id);
             createUserToken(username, data[0]._id+"").then((jwttokenstr) => {
                 res.send({
                     errMsg: "登录成功",
@@ -121,9 +118,6 @@ router.post("/login", bodyParser.json(), (req, res) => {
                     errCode: 1
                 })
             });
-
-           
-
         }
     })
 })

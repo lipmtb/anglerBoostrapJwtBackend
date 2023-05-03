@@ -3,11 +3,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 //用户
 const userModel = mongoose.model("user", new mongoose.Schema({
     userName: String,
-    userPsw: String,
-    phoneNum:String,
-    avatarUrl:String,
-    avatarRadX:Number,
-    avatarRadY:Number
+    userPsw: String
 }), "user");
 
 //互相关注

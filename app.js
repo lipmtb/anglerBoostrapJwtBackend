@@ -15,6 +15,7 @@ let socketRouter = require("./routes/socket");
 let manageRouter = require("./routes/manage");
 let uploadRouter = require("./routes/upload");
 let testRouter = require("./routes/test");
+let chataiRouter = require("./routes/chatai");
 let app = express();
 
 //token验证
@@ -28,10 +29,10 @@ let mytokenConfig = require('./token/token.js'); //解析token
 app.use(logger('dev'));
 
 //mongoose连接数据库
-mongoose.connect("mongodb://127.0.0.1:27001/jwtangler", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  },
+mongoose.connect("mongodb://127.0.0.1:27017/jwtangler", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+},
   function (err) {
     if (err) {
       throw err;
@@ -72,37 +73,31 @@ app.use((req, res, next) => {
   req.userinfo = null;
   console.log("****app use 获取到authorization*****", token);
   if (!token) {
-    return next();
+    next();
   } else {
     mytokenConfig.verifyTokenMyTest(token).then((payload) => {
       req.userinfo = payload;
       console.log("解析token成功", payload);
-      return next();
     }).catch((err) => {
       console.log("********解析token 错误************", err);
-      return next();
+    }).finally(() => {
+      next();
     })
   }
 })
 
-
-
-
 //验证token是否过期
-
 app.use(expressJWT({
   secret: mytokenConfig.mykey,
-  algorithms: ['HS256']
+  algorithms: ['HS256'],
 }).unless({
-  path: ["/regist", "/login", "/talk/hotTalk", "/talk/newTalk", "/tip/tipClassSomeEssays"] //除了这些地址，其他的URL都需要验证
+  path: ["/regist", "/login"] //除了这些地址，其他的URL都需要验证
 }));
-
 
 // token失效（不加authorization或者过期等的都会失效）
 app.use(function (err, req, res, next) {
   console.log("token失效++++++++++", err.status, err.inner.message);
   if (err.name === 'UnauthorizedError') {
-
     res.status(401).send({
       errCode: err.status,
       errMsg: err.inner.message,
@@ -114,11 +109,11 @@ app.use(function (err, req, res, next) {
 });
 
 
-
-
 app.use('/', loginRouter);
 
 app.use('/tip', tipRouter);
+
+app.use('/chatai', chataiRouter);
 
 app.use("/talk", talkRouter);
 

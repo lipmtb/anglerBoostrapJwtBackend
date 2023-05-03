@@ -3,7 +3,6 @@ let express = require('express');
 let router = express.Router();
 const mongoose = require("mongoose");
 
-
 // var http = require("http").Server(app);
 // var sio = require("socket.io")(http, {
 //     cors: true
@@ -11,10 +10,6 @@ const mongoose = require("mongoose");
 // http.listen(80, function () {
 //     console.log("express 服务启动");
 // })
-
-
-
-
 
 const {
     commModel,
@@ -259,4 +254,5 @@ router.get("/allMsgCount",function(req,res){
     })
 
 })
+
 module.exports = router;

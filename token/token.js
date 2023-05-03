@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const mykey = "ttkpffsdfdsdsdsfsdgsgfdfddhfd45645455hgf4h5gf4hgf5h4gf5h5gfh45gfh4fg5h4fgh5fh5fg4hf5g4hf5h4f5gh4f5h4fh5f4h5fgh4f5gh4gf5h4gf5hf6hfg2hf62g66gd2gfd6g2fdg"; //secretKey 密钥，服务端验证
+const mykey = "jjccfdsdsgdosgjdsdsgsgggsgddddddddddgsmgksjgkslgjsiogjsgljgljhohjdh"; //secretKey 密钥，服务端验证
 
 
 const createUserToken = (username, userid) => {
@@ -12,7 +12,7 @@ const createUserToken = (username, userid) => {
             userid: userid
         }, mykey, {
             algorithm: 'HS256',
-            expiresIn: 24* 60 * 60
+            expiresIn: 24 * 60 * 60
         }, (err, token) => {
             if (err) {
                 reject(err);
