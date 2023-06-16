@@ -25,12 +25,16 @@ router.post("/gptai", bodyParser.json(), (req, res) => {
         "model": "gpt-3.5-turbo",
         "messages": [{ "role": "user", "content": content }]
     }, requestConfig).then(response => {
-        console.log("请求成功", response);
-        res.send({
+        console.log("chatgpt响应成功:", response.data);
+        const responseBuffer = JSON.stringify({
             errCode: 0,
             choices: response.data.choices,
             message: "成功"
-        })
+        });
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Length', responseBuffer.length);
+        res.write(responseBuffer);
+        res.end();
     }).catch(error => {
         console.error("请求失败", error);
         res.send({
