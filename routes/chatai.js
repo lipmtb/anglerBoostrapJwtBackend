@@ -25,14 +25,14 @@ router.post("/gptai", bodyParser.json(), (req, res) => {
         "model": "gpt-3.5-turbo",
         "messages": [{ "role": "user", "content": content }]
     }, requestConfig).then(response => {
-        console.log("chatgpt响应成功:", response.data);
+        console.log("chatgpt响应成功:", JSON.stringify(response.data.choices));
         const responseBuffer = JSON.stringify({
             errCode: 0,
             choices: response.data.choices,
             message: "成功"
         });
         res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Content-Length', responseBuffer.length);
+        res.setHeader('Content-Length', Buffer.byteLength(responseBuffer,'utf8'));
         res.write(responseBuffer);
         res.end();
     }).catch(error => {
@@ -73,14 +73,14 @@ router.post("/longTurnAi", bodyParser.json(), (req, res) => {
         presence_penalty: 0.2,
         stop: ["Human", "AI"],
     }, requestConfig).then(response => {
-        console.log("chatgpt响应成功:", response.data);
+        console.log("longTurnAi响应:", JSON.stringify(response.data.choices));
         const responseBuffer = JSON.stringify({
             errCode: 0,
             choices: response.data.choices,
             message: "成功"
         });
         res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Content-Length', responseBuffer.length);
+        res.setHeader('Content-Length', Buffer.byteLength(responseBuffer,'utf8'));
         res.write(responseBuffer);
         res.end();
     }).catch(error => {
