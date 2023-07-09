@@ -106,7 +106,7 @@ router.post("/longTurnAi", bodyParser.json(), (req, res) => {
         "top_p": 1,
         "frequency_penalty": 0,
         "presence_penalty": 0.2,
-        "stop": ["Human:", "AI:"],
+        "stop": [" Human:", " AI:"],
     }, requestConfig).then(response => {
         console.log("longTurnAi响应:", JSON.stringify(response.data.choices));
         const responseBuffer = JSON.stringify({
