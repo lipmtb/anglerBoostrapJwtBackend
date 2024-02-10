@@ -3,7 +3,8 @@ let express = require('express');
 let router = express.Router();
 const axios = require("axios");
 // const { Configuration, OpenAIApi } = require("openai");
-const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
+// const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
+const OPENAI_URL = "https://api.chatanywhere.com.cn/v1/chat/completions";
 const OPENAI_URL_TURN = "https://api.openai.com/v1/completions";
 
 // openaiapi
