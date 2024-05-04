@@ -60,7 +60,7 @@ app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Authorization,X-Requested-With,Content-Type,Cache-Control');
   res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,HEAD');
   res.header('Access-Control-Allow-Credentials', true);
-
+  res.header("Access-Control-Expose-Headers","Content-Disposition");
   next();
 })
 
@@ -86,7 +86,7 @@ app.use((req, res, next) => {
   }
 })
 
-//验证token是否过期
+// //验证token是否过期
 app.use(expressJWT({
   secret: mytokenConfig.mykey,
   algorithms: ['HS256'],
